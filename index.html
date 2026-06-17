@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Sales Intelligence & Profit Margin Analytics Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+</head>
+
+<body>
+
+    <nav class="tab-bar">
+        <div class="tab-bar-brand">Sales Intelligence Analytics</div>
+        <button class="tab-btn active" id="tab-ai" onclick="switchMainTab('panel-ai', 'tab-ai')">
+            🤖 AI Dashboard <span class="tab-badge">D3 + LLM</span>
+        </button>
+        <button class="tab-btn" id="tab-tableau" onclick="switchMainTab('panel-tableau', 'tab-tableau')">
+            📈 Tableau Dashboard <span class="tab-badge">Public Link</span>
+        </button>
+    </nav>
+
+    <div id="panel-tableau" style="display:none">
+        <div class="tableau-wrap">
+            <div class="tableau-header"
+                style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                <h2>Analisis Komparatif Mikro - Tableau Public Embedded</h2>
+                <a class="qbtn" href="https://public.tableau.com/views/SalesProfitabilityPerformanceAnalysis/Dashboard1"
+                    target="_blank" style="text-decoration: none; background: var(--accent); color: white;">Buka di
+                    Tableau Public ↗</a>
+            </div>
+            <div class="tableau-iframe-wrap">
+                <iframe id="tableau-iframe" src=""
+                    data-src="https://public.tableau.com/views/SalesProfitabilityPerformanceAnalysis/Dashboard1?:showVizHome=no&:embed=true"
+                    allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div id="panel-ai">
+        <section class="zone zone-setup">
+            <div class="zone-inner">
+                <div class="zone-kicker">Setup &nbsp;·&nbsp; Konteks Penjualan Global</div>
+                <h1 id="narrative-title">Menganalisis berkas sales...</h1>
+
+                <div class="filter-container">
+                    <div class="filter-box">
+                        <label>PILIH KATEGORI</label>
+                        <select id="filter-category" onchange="onFilterChange()"></select>
+                    </div>
+                    <div class="filter-box">
+                        <label>PILIH SEGMEN KONSUMEN</label>
+                        <select id="filter-segment" onchange="onFilterChange()"></select>
+                    </div>
+                    <div class="filter-box">
+                        <label>PILIH WILAYAH (TERRITORY)</label>
+                        <select id="filter-territory" onchange="onFilterChange()"></select>
+                    </div>
+                </div>
+
+                <div class="summary-cards" id="summary-cards"></div>
+                <p id="setup-text" class="zone-desc">Memuat data komparatif makro...</p>
+            </div>
+        </section>
+
+        <section class="zone zone-conflict">
+            <div class="zone-inner">
+                <div class="zone-kicker conflict">Conflict &nbsp;·&nbsp; Deteksi Kebocoran & Outlier</div>
+                <p id="conflict-text" class="zone-desc">Mengevaluasi titik anomali margin keuntungan...</p>
+
+                <div class="alert-panel">
+                    <div class="alert-panel-header">
+                        <div class="aph-left">
+                            <span class="alert-title">Indeks Outlier Risiko</span>
+                            <span class="severity-badge severe" id="badge-severe">0 Kritis</span>
+                            <span class="severity-badge warning" id="badge-warning">0 Peringatan</span>
+                        </div>
+                        <button id="btn-narrate" onclick="requestAlertNarration()">Rangkum Isu (AI)</button>
+                    </div>
+                    <div class="alert-tabs">
+                        <button class="alert-tab active" onclick="switchAlertTab('raw', this)">Daftar Log
+                            Statistik</button>
+                        <button class="alert-tab" onclick="switchAlertTab('ai', this)">Kesimpulan LLM</button>
+                    </div>
+                    <div id="alert-tab-raw" class="alert-tab-content"></div>
+                    <div id="alert-tab-ai" class="alert-tab-content" style="display:none">
+                        <div id="ai-narration-output">
+                            <p style="color: var(--text-muted); font-style: italic;">Klik "Rangkum Isu (AI)" untuk
+                                memicu rangkuman.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charts-grid-layout">
+                    <div class="chart-card">
+                        <div class="chart-card-title" id="chart-title-subcat">Profit Margin per Sub-Kategori</div>
+                        <div id="chart-subcat" class="chart-viewport"></div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-card-title">Scatter Plot: Hubungan Volume Sales vs Keuntungan Bersih</div>
+                        <div id="chart-scatter" class="chart-viewport"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="zone zone-resolution">
+            <div class="zone-inner">
+                <div class="zone-kicker resolution">Resolution &nbsp;·&nbsp; Konsultasi Aksi Strategis</div>
+                <p id="resolution-text" class="zone-desc">Menyusun rekomendasi interaktif...</p>
+
+                <div class="insight-card">
+                    <div class="insight-header">
+                        <h3 style="font-weight: 700;">Konsol Tanya Jawab Cerdas</h3>
+                        <span class="tab-badge" id="model-badge"
+                            style="background: var(--accent-light); color: var(--accent);"></span>
+                    </div>
+                    <div id="insight-output" class="insight-output">
+                        <p style="color: var(--text-muted);">Siap menerima instruksi pencarian kustom...</p>
+                    </div>
+                    <div class="insight-input-wrap">
+                        <textarea id="custom-question"
+                            placeholder="Tanyakan tren/masalah data khusus (Contoh: Berikan strategi mitigasi untuk sub-kategori kargo yang rugi)..."
+                            rows="2"></textarea>
+                        <button id="btn-insight" onclick="requestInsight()">Minta Insight &rarr;</button>
+                    </div>
+                    <div class="quick-questions">
+                        <p style="font-weight: 700; font-size: 0.85rem; color: var(--text-muted);">Pintasan:</p>
+                        <button class="qbtn"
+                            onclick="quickAsk('Sesuai visualisasi scatter plot, mengapa kategori dengan sales besar tidak otomatis menjamin profit tinggi?')">💡
+                            Analisis Hubungan Sales-Profit</button>
+                        <button class="qbtn"
+                            onclick="quickAsk('Berikan 3 poin rekomendasi konkret jangka pendek untuk meningkatkan profitabilitas lini produk terlemah!')">🎯
+                            Berikan Rekomendasi Aksi</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="aiInsight.js"></script>
+    <script src="anomalyDetector.js"></script>
+    <script src="storyEngine.js"></script>
+    <script src="app.js"></script>
+
+    <script>
+        function switchMainTab(activePanelId, activeTabId) {
+            document.getElementById('panel-ai').style.display = activePanelId === 'panel-ai' ? 'block' : 'none';
+            document.getElementById('panel-tableau').style.display = activePanelId === 'panel-tableau' ? 'block' : 'none';
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(activeTabId).classList.add('active');
+            if (activePanelId === 'panel-tableau') {
+                const ifr = document.getElementById('tableau-iframe');
+                if (!ifr.src || ifr.src === window.location.href) ifr.src = ifr.getAttribute('data-src');
+            }
+        }
+    </script>
+</body>
+
+</html>
