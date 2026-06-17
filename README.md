@@ -1,8 +1,4 @@
 # 📊 Global Sales Intelligence & Profit Margin Analytics Dashboard
-
-🔗 **Live Dashboard:** [Akses di sini](https://sales-margin-analytics-putriandini.netlify.app/)
-🎥 **Video Presentasi:** [Tonton di YouTube](LINK_VIDEO_KAMU_DISINI)
-
 Dashboard data *storytelling* interaktif yang mengintegrasikan visualisasi **D3.js** dengan kekuatan **Generative AI (LLM)** menggunakan framework **SCR (Setup, Conflict, Resolution)**. Dashboard ini dirancang secara modular untuk menganalisis metrik performa retail, mendeteksi anomali margin profit secara statistik, dan merumuskan narasi bisnis eksekutif secara otomatis.
 
 ---
