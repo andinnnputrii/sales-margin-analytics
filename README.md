@@ -1,8 +1,14 @@
-# Global Sales Intelligence & Profit Margin Analytics Dashboard
+# 📊 Global Sales Intelligence & Profit Margin Analytics Dashboard
 
-Dashboard data storytelling interaktif yang mengintegrasikan visualisasi **D3.js** dengan kekuatan **Generative AI (LLM)** menggunakan framework **SCR (Setup, Conflict, Resolution)**. Dashboard ini dirancang secara modular untuk menganalisis metrik performa retail, mendeteksi anomali margin profit secara statistik, dan merumuskan narasi bisnis eksekutif secara otomatis.
+🔗 **Live Dashboard:** [Akses di sini](https://sales-margin-analytics-putriandini.netlify.app/)
+🎥 **Video Presentasi:** [Tonton di YouTube](LINK_VIDEO_KAMU_DISINI)
+
+Dashboard data *storytelling* interaktif yang mengintegrasikan visualisasi **D3.js** dengan kekuatan **Generative AI (LLM)** menggunakan framework **SCR (Setup, Conflict, Resolution)**. Dashboard ini dirancang secara modular untuk menganalisis metrik performa retail, mendeteksi anomali margin profit secara statistik, dan merumuskan narasi bisnis eksekutif secara otomatis.
+
+---
 
 ## 🚀 Fitur Utama
+
 1. **Automated Data Storytelling (SCR Framework)**: LLM secara otomatis membaca data agregat dan membagi analisis ke dalam tiga zona visual terpisah: *Setup* (konteks), *Conflict* (masalah/anomali), dan *Resolution* (rekomendasi aksi).
 2. **Statistical Anomaly Detection**: Menggunakan perhitungan *Z-Score* pada margin keuntungan untuk mengidentifikasi sub-kategori yang berkinerja buruk secara ekstrem (Z-Score < -0.8 atau profit negatif) dan memberikan *visual highlight* semantis (warna merah/oranye).
 3. **Interactive Narrative Title**: Judul utama dashboard digenerasikan secara dinamis oleh AI untuk mencerminkan *insight* paling kritis dari data terbaru, bukan sekadar judul deskriptif statis.
@@ -11,30 +17,31 @@ Dashboard data storytelling interaktif yang mengintegrasikan visualisasi **D3.js
 
 ---
 
-## 🛠️ Panduan Instalasi & Cara Menjalankan
+## 📁 Struktur Berkas
 
-Karena proyek ini memuat data eksternal dari file CSV (`Sales_BY_Category_202606040914-1.csv`) menggunakan D3.js, browser akan memblokir permintaan jika file dibuka langsung via protokol `file://` akibat kebijakan CORS. Proyek **wajib** dijalankan menggunakan lokal web server.
+Pastikan seluruh struktur berkas berada dalam satu folder utama (root) seperti berikut:
 
-### Langkah-langkah Menjalankan Proyek:
-1. Pastikan seluruh struktur berkas berada dalam satu folder yang sama:
-   ai-dashboard/
-   ├── index.html
-   ├── style.css
-   ├── app.js
-   ├── config.js
-   ├── aiInsight.js
-   ├── anomalyDetector.js
-   ├── storyEngine.js
-   ├── ollama-proxy.php
-   ├── img/
-   │   ├── screenshot1.png
-   │   ├── screenshot2.png
-   │   └── screenshot3.png
-   └── Sales_BY_Category_202606040914-1.csv
+```
+sales-margin-analytics/
+├── .gitignore                           # ⚠️ Mencegah API Key terunggah ke GitHub
+├── index.html                           # Layout utama (tab bar + 3 zona SCR)
+├── style.css                            # Semua styling komponen visual (Dark theme)
+├── config.js                            # ⚠️ API key & konfigurasi model AI
+├── app.js                               # Orkestrator utama: load data, render, filter
+├── aiInsight.js                         # Komunikasi dengan LLM (Groq / Ollama)
+├── anomalyDetector.js                   # Deteksi anomali: Z-score, MoM, dan IQR
+├── storyEngine.js                       # Generator narasi SCR otomatis via LLM
+├── ollama-proxy.php                     # Proxy opsional untuk integrasi model lokal
+└── Sales_BY_Category_202606040914-1.csv # Dataset utama penjualan retail
+```
+---
 
-### Buka folder proyek menggunakan code editor (VS Code).
-1. Jalankan lokal server. Pilihan praktis:
-2. Menggunakan extension Live Server di VS Code (Klik kanan pada index.html -> Open with Live Server).
+## Langkah-langkah Menjalankan Proyek:
+1. Buka folder proyek menggunakan code editor (VS Code).
+2. Jalankan lokal server. Pilihan praktis:
+3. Menggunakan extension Live Server di VS Code (Klik kanan pada index.html -> Open with Live Server).
+
+---
 
 ### Konfigurasi Penyedia AI (LLM Setup)
 Anda dapat memilih antara menggunakan layanan cloud berbasis API (Groq) atau model lokal tanpa internet (Ollama). Pengaturan dikelola melalui file config.js.
@@ -43,14 +50,18 @@ Menggunakan Groq API (Default Dev)
 1. Buka file config.js.
 2. Pastikan AI_PROVIDER diset ke 'groq'.
 3. Isi properti GROQ_API_KEY dengan API Key Groq Anda yang valid:
+ ```js
     GROQ_API_KEY: 'gsk_YOUR_ACTUAL_API_KEY_HERE',
     GROQ_MODEL: 'llama-3.1-8b-instant',
+```
+---
 
 📊 Dataset & Insight Utama
 Profil Data
 1. Sumber Data: Adventure Works Sales modifikasi (18.106 transaksi).
 2. Rentang Waktu: Juli 2001 – Juli 2004.
 3. Metrik Utama: Kategori (Bikes, Clothing, Accessories), Sales, Profit, Qty, dan Wilayah (Territory).
+---
 
 Insight Kritis yang Ditemukan
 1. Dominasi Revenue vs Margin: Sektor Bikes mendominasi omzet hingga ~97% dari total sales, namun sektor Accessories memiliki efisiensi margin terbaik yang konsisten di angka 55-62%.
@@ -58,6 +69,7 @@ Insight Kritis yang Ditemukan
 2. Anomali Margin Negatif: Sub-kategori Caps (Clothing) terdeteksi memiliki margin negatif (-2.3%). Hal ini otomatis memicu indikator Conflict berwarna merah karena performanya berada di bawah ambang batas statistik Z-score.
 
 3. Penyebaran Geografis: Wilayah Southwest menghasilkan revenue terbesar secara konsisten tiap kuartal.
+---
 
 📝 Refleksi Proyek
 Apa yang Berhasil
@@ -67,6 +79,7 @@ Apa yang Berhasil
 
 3. Efisiensi Z-Score: Pendekatan statistik berhasil memotong beban token prompt LLM karena AI hanya perlu membaca rangkuman data anomali yang sudah difilter oleh sistem, bukan seluruh baris mentah CSV.
 
+---
 Rencana Pengembangan ke Depan
 1. Brushing & Linking: Menambahkan fitur drill-down interaktif antar chart (misalnya, mengklik satu wilayah di peta/grafik akan otomatis memfilter grafik produk di sebelahnya tanpa menggunakan menu dropdown manual).
 
